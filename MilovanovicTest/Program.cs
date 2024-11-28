@@ -39,10 +39,11 @@ namespace MilovanovicTest
             return person;
         }
         
-        static async void addCsv(string path)
+        static void addCsv(string path)
         {
             List<int> newPeople = readCSV(path);
-            int count = 0;
+            List<int> rejected = new List<int>();
+            List<int> extraPeople = new List<int>();
             using (StreamReader sr = new StreamReader(testCSV))
             {
                 string line;
@@ -53,16 +54,12 @@ namespace MilovanovicTest
                         isFirst = false;
                         continue;
                     }
-
-                    if (count >= 5)
-                    {
-                        break;
-                    }
                     if (int.TryParse(line, out int personId))
                     {
                         if (newPeople.Contains(personId))
                         {
                             newPeople.Remove(personId);
+                            rejected.Add(personId);
                         }
                     }
                     else
@@ -71,13 +68,46 @@ namespace MilovanovicTest
                     }
                 }
             }
-            count += newPeople.Count;
+            int count = newPeople.Count;
+            if (count > 5)
+            {
+                for (int i = 5; i < count; i++)
+                {
+                    extraPeople.Add(newPeople[i]);
+                    newPeople.Remove(newPeople[i]);
+                }
+            }
             addToCSV(newPeople);
-            Console.WriteLine($"Added {count} people");
+            Console.WriteLine($"Added {newPeople.Count} people");
             foreach (var id in newPeople)
             {
                 Console.WriteLine(getPersonAsync(findPersonLine + id).Result.FindPersonResult.Name);
             }
+
+            if (rejected.Count > 0)
+            {
+                if (rejected.Count == 1)
+                {
+                    Console.WriteLine($"1 person from your list was already included in the promotion:");
+                }
+                else
+                {
+                    Console.WriteLine($"{rejected.Count} people from your list were already included in the promotion:");
+                }
+                foreach (var id in rejected)
+                {
+                    Console.WriteLine(getPersonAsync(findPersonLine + id).Result.FindPersonResult.Name);
+                }
+            }
+            if (extraPeople.Count > 0)
+            {
+                Console.WriteLine($"You added more than 5 people for your promotion, these following people could not be included:");
+                foreach (var id in extraPeople)
+                {
+                    Console.WriteLine(getPersonAsync(findPersonLine + id).Result.FindPersonResult.Name);
+                }
+            }
+            
         }
         
         static List<int> readCSV(string fileName)

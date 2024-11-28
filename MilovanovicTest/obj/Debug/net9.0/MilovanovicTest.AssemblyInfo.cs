@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("MilovanovicTest")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+531e442e5f02e20a86eaa8bcae6f2b4b28bf9f66")]
 [assembly: System.Reflection.AssemblyProductAttribute("MilovanovicTest")]
 [assembly: System.Reflection.AssemblyTitleAttribute("MilovanovicTest")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
