@@ -39,11 +39,11 @@ namespace MilovanovicTest
             return person;
         }
         
-        static void addCsv(string path)
+        static void mergeCsv(string path)
         {
-            List<int> newPeople = readCSV(path);
-            List<int> rejected = new List<int>();
-            List<int> extraPeople = new List<int>();
+            List<int> newPeople = readCSV(path); // The people which the agent will add
+            List<int> rejected = new List<int>(); // The people which the agent wanted to add, but were already in the db
+            List<int> extraPeople = new List<int>(); // The people which the agent wanted to add, but over the agent's limit
             using (StreamReader sr = new StreamReader(testCSV))
             {
                 string line;
@@ -86,6 +86,7 @@ namespace MilovanovicTest
 
             if (rejected.Count > 0)
             {
+                // Grammar purposes
                 if (rejected.Count == 1)
                 {
                     Console.WriteLine($"1 person from your list was already included in the promotion:");
@@ -94,6 +95,7 @@ namespace MilovanovicTest
                 {
                     Console.WriteLine($"{rejected.Count} people from your list were already included in the promotion:");
                 }
+                
                 foreach (var id in rejected)
                 {
                     Console.WriteLine(getPersonAsync(findPersonLine + id).Result.FindPersonResult.Name);
@@ -110,7 +112,7 @@ namespace MilovanovicTest
             
         }
         
-        static List<int> readCSV(string fileName)
+        static List<int> readCSV(string fileName) // Reads from the CSV to get a list of person Ids
         {
             var peopleIds = new List<int>();
             using (StreamReader sr = new StreamReader(fileName))
@@ -136,7 +138,7 @@ namespace MilovanovicTest
             return peopleIds;
         }
         
-        static void addToCSV(List<int> persons)
+        static void addToCSV(List<int> persons) // Adds a list of Person ids to the db
         {
             using (StreamWriter writer = new StreamWriter(testCSV, append: true))
             {
@@ -149,7 +151,7 @@ namespace MilovanovicTest
         
         static void Main()
         {
-            addCsv(newCSV);
+            mergeCsv(newCSV);
         }
         
     }
